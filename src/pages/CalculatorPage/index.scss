@@ -1,0 +1,16 @@
+.p-calculator-page {
+  display: flex;
+  flex-direction: column;
+
+  &__content {
+    display: flex;
+
+    &-form {
+      margin-top: 150px;
+    }
+
+    &-controls-button {
+      margin-top: 20px;
+    }
+  }
+}

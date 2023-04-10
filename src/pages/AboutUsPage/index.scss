@@ -1,0 +1,23 @@
+.p-about-us-page {
+  &__content {
+  }
+
+  &__title {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 75px;
+    line-height: 91px;
+
+    color: #ffffff;
+  }
+
+  &__description {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 50px;
+    line-height: 61px;
+
+    color: #ffffff;
+  }
+}
