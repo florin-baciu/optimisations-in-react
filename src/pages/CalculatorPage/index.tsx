@@ -22,10 +22,11 @@ const Chart = lazy(() => import("@/components/Chart"));
 export const CalculatorPage = () => {
   const [graphData, setGraphData] = useState<EngineMap | null>(null);
   const [newGraphData, setNewGraphData] = useState<EngineMap | null>(null);
+  const [isProcessingNewMap, setIsProcessingNewMap] = useState(false);
 
   const [form] = Form.useForm();
 
-  const { enhanceMap } = utils.FUNCTIONS;
+  // const { enhanceMap } = utils.FUNCTIONS;
 
   function readSingleFile(e: Event) {
     const element = e.target as HTMLInputElement;
@@ -42,6 +43,29 @@ export const CalculatorPage = () => {
     };
     reader.readAsText(file[0]);
   }
+
+  const enhanceMap = (graphData: EngineMap) => {
+    const worker = new Worker("/workers/optimiserWorker.js");
+    let result = null;
+
+    setIsProcessingNewMap(true);
+
+    worker.onmessage = function (event: any) {
+      result = event.data;
+      console.log("result", result);
+      setNewGraphData(result);
+      setIsProcessingNewMap(false);
+      worker.terminate();
+    };
+
+    worker.onerror = function (event: any) {
+      console.log("error", event);
+      setIsProcessingNewMap(false);
+      worker.terminate();
+    };
+
+    worker.postMessage(graphData);
+  };
 
   return (
     <div className="p-calculator-page">
@@ -68,7 +92,9 @@ export const CalculatorPage = () => {
           <Button
             className="p-calculator-page__content-controls-button"
             onClick={() => {
-              if (graphData) setNewGraphData(enhanceMap(graphData));
+              if (graphData) {
+                enhanceMap(graphData);
+              }
             }}
             type="primary"
           >
@@ -80,7 +106,15 @@ export const CalculatorPage = () => {
             <Chart graphData={graphData} />
           </Suspense>
         )}
-        {newGraphData && <Chart graphData={newGraphData} />}
+        {isProcessingNewMap ? (
+          <Spin size="large" />
+        ) : (
+          newGraphData && (
+            <Suspense fallback={<Spin size="large" />}>
+              <Chart graphData={newGraphData} />
+            </Suspense>
+          )
+        )}
       </div>
     </div>
   );
