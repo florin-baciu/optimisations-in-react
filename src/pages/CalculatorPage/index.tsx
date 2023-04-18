@@ -17,7 +17,7 @@ interface EngineMap {
   };
 }
 
-export const CalculatorPage = () => {
+const CalculatorPage = () => {
   const [graphData, setGraphData] = useState<EngineMap | null>(null);
   const [newGraphData, setNewGraphData] = useState<EngineMap | null>(null);
 
@@ -79,3 +79,5 @@ export const CalculatorPage = () => {
     </div>
   );
 };
+
+export default CalculatorPage;
