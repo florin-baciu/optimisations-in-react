@@ -1,7 +1,7 @@
-import { Button, Form, Input, Select } from "antd";
-import { useState } from "react";
+import { Button, Form, Input, Select, Spin } from "antd";
+import { Suspense, lazy, useState } from "react";
 
-import Chart from "@/components/Chart";
+//import Chart from "@/components/Chart";
 import { utils } from "@/utils";
 
 import "./index.scss";
@@ -17,7 +17,9 @@ interface EngineMap {
   };
 }
 
-const CalculatorPage = () => {
+const Chart = lazy(() => import("@/components/Chart"));
+
+export const CalculatorPage = () => {
   const [graphData, setGraphData] = useState<EngineMap | null>(null);
   const [newGraphData, setNewGraphData] = useState<EngineMap | null>(null);
 
@@ -73,11 +75,13 @@ const CalculatorPage = () => {
             Generate New Map
           </Button>
         </div>
-        {graphData && <Chart graphData={graphData} />}
+        {graphData && (
+          <Suspense fallback={<Spin size="large" />}>
+            <Chart graphData={graphData} />
+          </Suspense>
+        )}
         {newGraphData && <Chart graphData={newGraphData} />}
       </div>
     </div>
   );
 };
-
-export default CalculatorPage;

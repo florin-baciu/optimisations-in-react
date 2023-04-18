@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 import React, { lazy, Suspense } from "react";
 
-//import { CalculatorPage } from "./pages/CalculatorPage";
+import { CalculatorPage } from "./pages/CalculatorPage";
 import { AboutUsPage } from "./pages/AboutUsPage";
 import { Template } from "./pages/TemplatePage";
 import { HomePage } from "./pages/HomePage";
@@ -19,21 +19,12 @@ import "./index.css";
 
 const links = utils.CONSTANTS.PATHS;
 
-const CalculatorPage = lazy(async () => await import("./pages/CalculatorPage"));
-
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="" element={<Template />}>
       <Route path={links.HOME} element={<HomePage />} />
       <Route path={links.ABOUT} element={<AboutUsPage />} />
-      <Route
-        path={links.CALCULATOR}
-        element={
-          <Suspense fallback={<Spin size="large" />}>
-            <CalculatorPage />
-          </Suspense>
-        }
-      />
+      <Route path={links.CALCULATOR} element={<CalculatorPage />} />
       <Route path={links.MONITOR} element={<>monitor</>} />
     </Route>
   )
